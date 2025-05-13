@@ -10,8 +10,11 @@ import {
 } from "react-icons/hi2";
 import { HiDotsVertical } from "react-icons/hi";
 import HeaderList from "./HeaderList";
+import { useState } from "react";
 
 function Header() {
+  const [toggle, setToggle] = useState(false);
+
   const menu = [
     {
       name: "HOME",
@@ -39,6 +42,10 @@ function Header() {
     },
   ];
 
+  function handleClick() {
+    setToggle(!toggle);
+  }
+
   return (
     <div className="flex items-start justify-between gap-8 h-screen w-screen p-5">
       <div className="flex gap-8 items-center">
@@ -53,13 +60,22 @@ function Header() {
         </div>
         <div className="flex md:hidden gap-8">
           {menu.map((item, index) => {
-            return (
-              index < 3 && <HeaderList name={item.name} Icon={item.icon} />
-            );
+            return index < 3 && <HeaderList name={""} Icon={item.icon} />;
           })}
 
-          <div className="md:hidden">
+          <div className="md:hidden" onClick={handleClick}>
             <HeaderList name={""} Icon={HiDotsVertical} />
+            {toggle ? (
+              <div className="absolute mt-3 bg-[#121212] border-[1px] p-3 border-gray-700 px-5 py-4">
+                {menu.map((item, index) => {
+                  return (
+                    index >= 3 && (
+                      <HeaderList name={item.name} Icon={item.icon} />
+                    )
+                  );
+                })}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
