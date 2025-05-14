@@ -2,9 +2,13 @@ import React from "react";
 
 const HeaderList = ({ name, Icon }) => {
   return (
-    <div className="text-white flex items-start gap-3 text-[18px] font-semibold cursor-pointer hover:underline underline-offset-8 mb-3">
+    <div
+      className="text-white flex items-center gap-3
+    text-[15px] font-semibold cursor-pointer hover:underline
+    underline-offset-8 mb-2"
+    >
       <Icon />
-      <h2 className="md:block">{name}</h2>
+      <h2 className="">{name}</h2>
     </div>
   );
 };
