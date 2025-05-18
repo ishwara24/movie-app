@@ -9,9 +9,12 @@ import {
 } from "react-icons/hi2";
 import { HiPlus, HiDotsVertical } from "react-icons/hi";
 import HeaderList from "./HeaderList";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [toggle, setToggle] = useState(false);
+  const navigate = useNavigate();
+
   const menu = [
     {
       name: "HOME",
@@ -38,46 +41,70 @@ function Header() {
       icon: HiTv,
     },
   ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+    navigate("/login");
+  };
+
   return (
     <div className="flex items-center justify-between p-5">
-      <div className="flex  gap-8 items-center">
+      {/* Left: Logo + Menu */}
+      <div className="flex gap-8 items-center">
         <img
           src={logo}
-          className="w-[80px] 
-        md:w-[115px] object-cover"
+          alt="logo"
+          className="w-[80px] md:w-[115px] object-cover"
         />
+
+        {/* Desktop Menu */}
         <div className="hidden md:flex gap-8">
           {menu.map((item) => (
-            <HeaderList name={item.name} Icon={item.icon} />
+            <HeaderList key={item.name} name={item.name} Icon={item.icon} />
           ))}
         </div>
+
+        {/* Mobile Menu */}
         <div className="flex md:hidden gap-5">
           {menu.map(
             (item, index) =>
-              index < 3 && <HeaderList name={""} Icon={item.icon} />
+              index < 3 && (
+                <HeaderList key={item.name} name={""} Icon={item.icon} />
+              )
           )}
-          <div className="md:hidden" onClick={() => setToggle(!toggle)}>
+          <div className="md:hidden relative" onClick={() => setToggle(!toggle)}>
             <HeaderList name={""} Icon={HiDotsVertical} />
-            {toggle ? (
+            {toggle && (
               <div
-                className="absolute mt-3 bg-[#121212] 
-            border-[1px] border-gray-700 p-3 px-5 py-4"
+                className="absolute top-10 left-0 z-10 bg-[#121212] 
+                border border-gray-700 p-3 px-5 py-4 rounded-md"
               >
                 {menu.map(
                   (item, index) =>
                     index > 2 && (
-                      <HeaderList name={item.name} Icon={item.icon} />
+                      <HeaderList key={item.name} name={item.name} Icon={item.icon} />
                     )
                 )}
               </div>
-            ) : null}
+            )}
           </div>
         </div>
       </div>
-      <img
-        src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-        className="w-[40px] rounded-full"
-      />
+
+      {/* Right: Avatar + Logout */}
+      <div className="flex items-center gap-4">
+        <img
+          src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
+          alt="User"
+          className="w-[40px] rounded-full"
+        />
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 text-white px-4 py-1 rounded-md hover:bg-red-700 transition-all text-sm"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 }
